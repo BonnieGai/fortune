@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="css/new_file.css" />
+</head>
+
+<body>
+    <div id="part">
+        <div class="partCon">
+            <div class="banner">
+                <a href="javascript:void(0)" class="prev"></a>
+                <a href="javascript:void(0)" class="next"></a>
+                <div class="scroll">
+                    <img class="first" src="img/flash1.jpg" />
+                    <img src="img/flash2.jpg" />
+                    <img src="img/flash3.jpg" />
+                    <img src="img/flash4.jpg" />
+                    <img src="img/flash5.png" />
+                    <img src="img/flash6.jpg" />
+                </div>
+                <div class="btn">
+                    <span class="hover"></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-1.11.3.js"></script>
+    	<script type="text/javascript">
+		var $img=$('.scroll img');
+		var $span=$('.btn span');
+		var $index=0;
+		var $pindex=0;
+		//点击span控制左右
+		$span.on('click',function(ev){
+			$index=$(this).index();
+			
+			move(ev);
+			$pindex=$index;
+			console.log($index,$pindex);
+		})
+		
+		//2.鼠标移入左右按钮显示
+		$('.banner').hover(function(){
+			$(this).find('a').show();
+			clearInterval(timer);
+		},function(){
+			$(this).find('a').hide();
+			clearInterval(timer);
+			timer=setInterval(function(){
+			$('.next')[0].click();
+		},1000)
+		})
+		
+		//3.点击右边
+		$('.next').on('click',function(ev){
+			$index++;
+			if($index>5){
+				$index=0;
+				$pindex=5;
+			}
+			
+			move(ev);			
+			$pindex=$index;
+		})
+		//4.点击左边
+		$('.prev').on('click',function(ev){
+			$index--;
+			if($index<0){
+				$index=5;
+				$pindex=0;
+			}
+			move(ev);			
+			$pindex=$index;
+		})
+		
+		//5.自动
+		var timer=setInterval(function(){
+			$('.next')[0].click();
+		},1000)
+	
+		function move(ev){
+			if($pindex==5 && $index==0){
+				if(ev.target.tagName=='A'){
+					$img.eq($pindex).animate({
+	    				left:-820
+	    			});
+	    			$img.eq($index).css('left','820px').animate({
+	    				left:0
+	    			});   			
+				}else if(ev.target.tagName=='SPAN'){
+					$img.eq($pindex).animate({
+						left:820
+					}).siblings('img').css("left","-820px");
+					$img.eq($index).animate({
+						left:0
+					})		
+				}
+				$span.eq($index).addClass('hover').siblings().removeClass('hover');						
+			}else if($pindex==0 && $index==5){
+				if(ev.target.tagName=='A'){
+						$img.eq($pindex).animate({
+		    				left:820
+		    			});
+		    			$img.eq($index).css('left','-820px').animate({
+		    				left:0
+		    			})
+				}else if(ev.target.tagName=='SPAN'){
+					$img.eq($pindex).animate({
+						left:-820
+					}).siblings('img').css("left","820px");
+					$img.eq($index).animate({
+						left:0
+					})		
+				}
+				$span.eq($index).addClass('hover').siblings().removeClass('hover');			
+			}else if($index>$pindex){
+				$img.eq($pindex).animate({
+					left:-820
+				}).siblings('img').css("left","820px");
+				$img.eq($index).animate({
+					left:0
+				})		
+			}else if($index<$pindex){				
+				$img.eq($pindex).animate({
+					left:820
+				}).siblings('img').css("left","-820px");
+				$img.eq($index).animate({
+					left:0
+				})		
+			}	
+			$span.eq($index).addClass('hover').siblings().removeClass('hover');				
+		}
+			
+
+    	</script>
+</body>
+
+</html>
